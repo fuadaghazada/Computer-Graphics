@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Cityscape</title>
+
+    <link rel="shortcut icon" type="image/png" href="Source/img/bilkent.png"/>
+    <link rel="stylesheet" href="Source/style/bootstrap/css/style.css">
+    <link rel="stylesheet" href="Source/style/bootstrap/css/bootstrap.min.css">
+</head>
+<body>
+
+    <!-- ________Markup elements_______ -->
+    <header>
+        <h1>Computer Graphics (CS 465)</h1>
+        <h2><i>Assignment 1: Cityscape</i></h2>
+    </header>
+
+    <!-- Generate Panel -->
+    <div class="row input-panel">
+        <div class="col-md-3 col-md-offset-3">
+            <h2>Create your cityscape!</h2>
+            <hr>
+            <label for="house"># of Houses: <span id="house">0</span></label>
+            <input class="slider" type="range" min="0" max="7" value="0" id="num-houses" name="house">
+            <br>
+            <label for="story"># of Stories (Max): <span id="story">1</span></label>
+            <input class="slider" type="range" min="1" max="4" value="1" id="num-stories" name="story">
+            <br>
+            <button class="btn btn-primary btn-lg btn-block" id="generate">Generate</button>
+            <br><br>
+            <label for="randomize"><i>You can also randomize automatically.</i></label>
+            <button class="btn btn-primary btn-lg btn-block" id="randomize">Randomize</button>
+        </div>
+
+        <!-- Save Load -->
+        <div class="col-md-3">
+            <h2>Save & Load</h2>
+            <hr>
+            <label for="save-field"><i>You can save this scene by entering a name for it.</i></label>
+            <input type="text" id="save-content" class="form-control" placeholder="Enter a name that you want to save the scene..." name="save-field" required>
+            <button id="save" class="btn-primary btn-lg btn-block" name="save-btn">Save</button>
+            <br>
+            <label for="load-options"><i>You can load a scene by selecting one of the options below.</i></label>
+            <select name="load-options" id="storage" class="form-control"></select>
+            <button id="load" name="load-btn" class="btn-primary btn-lg btn-block">Load</button>
+            <br>
+            <label for="remove-btn"><i>You can remove a scene by selecting one of the options above.</i></label>
+            <button id="remove" name="remove-btn" class="btn-warning btn-lg btn-block">Remove Selected</button>
+            <label for="clear-btn"><i>You can clear all scenes in the storage.</i></label>
+            <button id="clear" name="clear-btn" class="btn-danger btn-lg btn-block">Clear Storage</button>
+            <br>
+        </div>
+    </div>
+
+    <!-- Canvas element -->
+    <div class="row text-center">
+        <div class="col-md-12">
+            <p class="tutorial">You can click on the sky <u>(at least 3 clicks)</u> and press 'Enter' key to generate clouds.</p>
+        </div>
+        <div class="col-md-12">
+            <canvas id="gl-canvas" width="1280" height="720">
+                Your browser does not support the HTML5 canvas element.
+            </canvas>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="row text-center">
+        <div class="col-md-12">
+            <h4>Copyright &copy Fuad Aghazada</h4>
+        </div>
+    </footer>
+
+    <!-- End of markups -->
+
+
+    <!-- ________Scripts_______ -->
+
+    <!-- Vertex Shader -->
+    <script type="x-shader/x-vertex" id="vertex-shader">
+
+    attribute vec4 vPosition;
+    attribute vec3 vColor;
+    varying vec4 color;
+
+    void main()
+    {
+        gl_PointSize = 10.0;
+        gl_Position = vPosition;
+        color = vec4(vColor, 1.0);
+    }
+
+    </script>
+
+    <!-- Fragment Shader -->
+    <script type="x-shader/x-fragment" id="fragment-shader">
+
+    precision mediump float;
+    varying vec4 color;
+
+    void main()
+    {
+        gl_FragColor = color;
+    }
+
+    </script>
+
+    <!-- Included sciprts for src and Executable -->
+    <script type="text/javascript" src="Executable/webgl-utils.js"></script>
+    <script type="text/javascript" src="Executable/initShaders.js"></script>
+    <script type="text/javascript" src="Executable/MV.js"></script>
+    <script type="text/javascript" src="Source/scripts/data.js"></script>
+    <script type="text/javascript" src="Source/scripts/cityscape.js"></script>
+
+    <!-- JQuery -->
+    <script
+    src="https://code.jquery.com/jquery-2.2.4.js"
+    integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+    crossorigin="anonymous"></script>
+
+
+</body>
+</html>

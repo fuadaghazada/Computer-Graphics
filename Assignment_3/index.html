@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Superquadric Surfaces</title>
+
+    <link rel="shortcut icon" type="image/png" href="Source/img/bilkent.png"/>
+    <link rel="stylesheet" href="Source/style/bootstrap/css/style.css">
+    <link rel="stylesheet" href="Source/style/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="Source/style/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="Source/style/bootstrap/css/toastr.css">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- ________Markup elements_______ -->
+        <header class="row text-center">
+            <div class="col-md-12">
+                <h1>Computer Graphics (CS 465)</h1>
+                <h2><i>Assignment 3: Rendering techniques on Superquadric Surfaces</i></h2>
+            </div>
+        </header>
+        <!-- End of Header -->
+
+        <!-- Main content -->
+        <div class="row">
+            <!-- Control panel -->
+            <div class="col-md-4">
+                <div class="control-panel">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2 style="margin: 0; color: white;">Parameters</h2>
+                        </div>
+
+                        <div class="col-md-6 text-right">
+                            <button id="zoom-in" style="border: none; background-color: transparent;"><i class="fa fa-search-plus" style="font-size: 20px; color: white;"></i></button>
+                            <button id="zoom-out" style="border: none; background-color: transparent;"><i class="fa fa-search-minus" style="font-size: 20px; color: white;"></i></button>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <label for="shading-type">Choose Shader: </label>
+                    <select name="" id="shading-type" class="form-control">
+                        <option value="0">Wireframe</option>
+                        <option value="1">Phong</option>
+                        <option value="2">Gouraud</option>
+                    </select>
+
+                    <hr>
+
+                    <label for="model">Choose Model: </label>
+                    <select name="" id="model" class="form-control">
+                        <option value="1" selected>Superellipsoid</option>
+                        <option value="2">Supertoroid</option>
+                    </select>
+
+                    <hr>
+
+                    <label for="texture">Choose Texture: </label>
+                    <select name="" id="texture" class="form-control"></select>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <label for="env-active">Environment mapping: </label>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="checkbox" id="env-active" class="form-control">
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="e1">Vertical squareness (e1): <span id="e1_val"></span></label>
+                            <input type="range" class="slider" min=".4" step="0.2" max="10" value="2" id="e1">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="e2">Horizontal squareness (e2): <span id="e2_val"></span></label>
+                            <input type="range" class="slider" min=".4" step="0.2" max="10" value="2" id="e2">
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row text-center">
+                        <div class="col-md-6">
+                            <label for="theta+">Angle Theta</label><br>
+                            <button id="theta+" class="btn-info">Theta (+)</button>
+                            <button id="theta-" class="btn-danger">Theta (-)</button>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phi+">Angle Phi</label><br>
+                            <button id="phi+" class="btn-info">Phi (+)</button>
+                            <button id="phi-" class="btn-danger">Phi (-)</button>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="a1">A1: <span id="a1_val"></span></label>
+                            <input type="range" class="slider" min="0.5" step="0.1" max="2" value="2" id="a1">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="a2">A2: <span id="a2_val"></span></label>
+                            <input type="range" class="slider" min="0.5" step="0.1" max="2" value="2" id="a2">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="a3">A3: <span id="a3_val"></span></label>
+                            <input type="range" class="slider" min="0.5" step="0.1" max="2" value="2" id="a3">
+                        </div>
+                        <div class="col-md-3">
+                            <div id="torus">
+                                <label for="t-r">Torus R: <span id="t-r_val"></span></label>
+                                <input type="range" class="slider" min="0.5" step="0.1" max="1.4" value="1.4" id="t-r">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row text-center">
+                        <label for="save">You can Save & Load the current model</label><br>
+                        <button id="save" class="btn btn-info btn-large">Save</button>
+                        <input class="hidden" type="file" id="load">
+                        <label for="load" class="btn btn-info btn-large">Load</label>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Canvas  -->
+            <div class="col-md-8 text-center">
+                <div id="bgCanvas">
+                    <div class="row text-center">
+                        <div class="col-md-12">
+                            <canvas id="gl-canvas" width="1000" height="1000">
+                                Your browser does not support the HTML5 canvas element.
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Canvas -->
+        </div>
+
+    </div>
+
+    <!-- ________Scripts_______ -->
+
+    <!-- SHADERS -->
+
+    <!-- Wirefirame Vertex Shader -->
+    <script type="x-shader/x-vertex" id="wire-frame-vertex-shader">
+
+    attribute vec4 vPosition;
+
+    uniform mat4 modelViewMatrix;
+    uniform mat4 projectionMatrix;
+
+    void main()
+    {
+        gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+    }
+
+    </script>
+
+
+    <!-- Wirefirame Vertex Fragment Shader -->
+    <script type="x-shader/x-fragment" id="wire-frame-fragment-shader">
+
+    precision mediump float;
+
+    void main()
+    {
+        gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    }
+
+    </script>
+
+    <!-- =================================================================== -->
+
+    <!-- Phong Vertex Shader -->
+    <script type="x-shader/x-vertex" id="phong-vertex-shader">
+
+    attribute vec4 vPosition;
+    attribute vec4 vNormal;
+    attribute vec2 vTexCoord;
+
+    varying vec4 fColor;
+    varying vec2 fTexCoord;
+
+    varying vec3 R;
+
+    uniform vec4 ambientProduct, diffuseProduct, specularProduct;
+    uniform mat4 modelViewMatrix;
+    uniform mat4 projectionMatrix;
+    uniform vec4 lightPosition;
+    uniform float shininess;
+    uniform mat3 normalMatrix;
+
+    void main()
+    {
+        vec3 pos = (modelViewMatrix * vPosition).xyz;
+
+        vec3 L;
+        if(lightPosition.w == 0.0)
+            L = normalize(lightPosition.xyz);
+        else
+            L = normalize( lightPosition.xyz - pos );
+
+        vec3 E = -normalize( pos );
+        vec3 H = normalize( L + E );
+        vec3 N = normalize( normalMatrix*vNormal.xyz);
+        R = reflect(pos, N);
+
+        vec4 ambient = ambientProduct;
+
+        float Kd = max( dot(L, N), 0.0 );
+        vec4 diffuse = Kd*diffuseProduct;
+
+        float Ks = pow( max(dot(N, H), 0.0), shininess );
+        vec4  specular = Ks * specularProduct;
+
+        if( dot(L, N) < 0.0 ) {
+            specular = vec4(0.0, 0.0, 0.0, 1.0);
+        }
+
+        gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+
+        fColor = ambient + diffuse + specular;
+        fColor.a = 1.0;
+
+        fTexCoord = vTexCoord;
+    }
+
+    </script>
+
+    <!-- Phong Fragment Shader -->
+    <script type="x-shader/x-fragment" id="phong-fragment-shader">
+
+    precision mediump float;
+
+    varying vec4 fColor;
+    varying vec2 fTexCoord;
+
+    uniform sampler2D texture;
+
+    void main()
+    {
+        gl_FragColor = fColor * texture2D(texture, fTexCoord);
+    }
+
+    </script>
+
+    <!-- Phong Fragment Shader (Environment mapping technique) -->
+    <script type="x-shader/x-fragment" id="phong-fragment-shader-env">
+
+    precision mediump float;
+
+    varying vec4 fColor;
+
+    uniform samplerCube texMap;
+    varying vec3 R;
+
+    void main()
+    {
+        vec4 texColor = textureCube(texMap, R);
+        gl_FragColor = fColor * texColor;
+    }
+
+    </script>
+
+    <!-- =================================================================== -->
+
+    <!-- Gouraud Vertex Shader -->
+    <script type="x-shader/x-vertex" id="gouraud-vertex-shader">
+
+    attribute vec4 vPosition;
+    attribute vec4 vNormal;
+    attribute vec2 vTexCoord;
+
+    varying vec2 fTexCoord;
+
+    varying vec3 N, L, E, R;
+    uniform mat4 modelViewMatrix;
+    uniform mat4 projectionMatrix;
+    uniform vec4 lightPosition;
+    uniform mat3 normalMatrix;
+
+    void main()
+    {
+        vec3 pos = (modelViewMatrix * vPosition).xyz;
+
+        if(lightPosition.w == 0.0)
+            L = normalize(lightPosition.xyz);
+        else
+            L = normalize( lightPosition.xyz - pos );
+
+        E =  -normalize(pos);
+        N = normalize( normalMatrix*vNormal.xyz);
+        R = reflect(pos, N);
+
+        gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+        fTexCoord = vTexCoord;
+    }
+
+    </script>
+
+    <!-- Gouraud Fragment shading -->
+    <script type="x-shader/x-fragment" id="gouraud-fragment-shader">
+
+    precision mediump float;
+
+    uniform vec4 ambientProduct;
+    uniform vec4 diffuseProduct;
+    uniform vec4 specularProduct;
+    uniform float shininess;
+    varying vec3 N, L, E, R;
+
+    varying vec2 fTexCoord;
+    uniform sampler2D texture;
+
+    void main()
+    {
+        vec4 fColor;
+
+        vec3 H = normalize( L + E );
+        vec4 ambient = ambientProduct;
+
+        float Kd = max( dot(L, N), 0.0 );
+        vec4  diffuse = Kd*diffuseProduct;
+
+        float Ks = pow( max(dot(N, H), 0.0), shininess );
+        vec4  specular = Ks * specularProduct;
+
+        if( dot(L, N) < 0.0 )
+            specular = vec4(0.0, 0.0, 0.0, 1.0);
+
+        fColor = ambient + diffuse +specular;
+        fColor.a = 1.0;
+
+        gl_FragColor = fColor * texture2D(texture, fTexCoord);
+    }
+    </script>
+
+    <!-- Gouraud Fragment shading (Environment mapping)-->
+    <script type="x-shader/x-fragment" id="gouraud-fragment-shader-env">
+
+    precision mediump float;
+
+    uniform vec4 ambientProduct;
+    uniform vec4 diffuseProduct;
+    uniform vec4 specularProduct;
+    uniform float shininess;
+    varying vec3 N, L, E, R;
+
+    uniform samplerCube texMap;
+
+    void main()
+    {
+        vec4 fColor;
+
+        vec3 H = normalize( L + E );
+        vec4 ambient = ambientProduct;
+
+        float Kd = max( dot(L, N), 0.0 );
+        vec4  diffuse = Kd*diffuseProduct;
+
+        float Ks = pow( max(dot(N, H), 0.0), shininess );
+        vec4  specular = Ks * specularProduct;
+
+        if( dot(L, N) < 0.0 )
+            specular = vec4(0.0, 0.0, 0.0, 1.0);
+
+        fColor = ambient + diffuse +specular;
+        fColor.a = 1.0;
+
+        vec4 texColor = textureCube(texMap, R);
+        gl_FragColor = fColor * texColor;
+    }
+    </script>
+
+    <!-- Included sciprts for src and Executable -->
+    <script type="text/javascript" src="Executable/webgl-utils.js"></script>
+    <script type="text/javascript" src="Executable/initShaders.js"></script>
+    <script type="text/javascript" src="Executable/MV.js"></script>
+    <script type="text/javascript" src="Source/scripts/file.js"></script>
+    <script type="text/javascript" src="Source/scripts/data.js"></script>
+    <script type="text/javascript" src="Source/scripts/generator.js"></script>
+    <script type="text/javascript" src="Source/scripts/main.js"></script>
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="Source/style/bootstrap/js/fullView.js"></script>
+    <script src="Source/style/bootstrap/js/toastr.js"></script>
+
+</body>
+</html>

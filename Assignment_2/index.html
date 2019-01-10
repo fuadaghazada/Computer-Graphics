@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Praying Mantis</title>
+
+    <link rel="shortcut icon" type="image/png" href="Source/img/bilkent.png"/>
+    <link rel="stylesheet" href="Source/style/bootstrap/css/style.css">
+    <link rel="stylesheet" href="Source/style/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="Source/style/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="Source/style/bootstrap/css/toastr.css">
+</head>
+<body>
+    <div id="temp-msg-div">
+        <h1>NOT RESPONSIVE! :(</h1>
+        <h2>You need to have a device with at least <span>1600px</span> screen width!</h2>
+        <h3>In upcoming updates it can be improved, so <span>STAY TUNED!</span></h3>
+    </div>
+
+    <div class="wrapper">
+        <!-- ________Markup elements_______ -->
+        <header class="row">
+            <div class="col-md-5" style="padding:20px;">
+                <h1>Computer Graphics (CS 465)</h1>
+                <h2><i>Assignment 2: Articulated body - Praying Mantis</i></h2>
+            </div>
+
+            <div class="col-md-1 text-center">
+                <p>You can save the current posture with this button</p>
+                <button id="save-k-f" class="btn btn-warning btn-large">Save Key Frame</button>
+            </div>
+
+            <div class="col-md-1 text-center">
+                <p>You can load the last key frame with this button</p>
+                <button id="load-l-k-f" class="btn btn-info btn-large">Load Last Key Frame</button>
+            </div>
+
+            <div class="col-md-1 text-center">
+                <p>You can clear the saved Key Frames</p>
+                <br>
+                <button id="clear-k-f" class="btn btn-danger btn-large">Clear Key Frame List</button>
+            </div>
+
+            <div class="col-md-2 text-center col-md-offset-1 text-center">
+                <p>You can save, load and run animations using respective buttons</p>
+                <button id="save-anim" class="btn btn-info btn-large">Save</button>
+                <input class="hidden" type="file" id="load-anim">
+                <label for="load-anim" class="btn btn-info btn-large">Load</label>
+                <button id="run-anim"  class="btn btn-success btn-large">Run</button>
+                <br>
+                <div class="col-md-6">
+                    <label for="isLoop" style="font-size: 10px; margin-top: 15px;">You can set loop here</label>
+                    <input type="checkbox" id="is-loop" name="isLoop">
+                </div>
+                <div class="col-md-6">
+                    <label for="anim-speed" style="font-size: 10px; margin-top: 15px;" >Animation speed</label>
+                    <input type="range" min="1" max="3" value="2" id="anim-speed" step="1" name="slider_id">
+                </div>
+            </div>
+
+            <div class="col-md-1 text-center">
+                <p>Full Screen</p>
+                <br>
+                <a class="expand"><i class="fa fa-expand"></i></a>
+            </div>
+
+        </header>
+        <!-- Control Panel -->
+
+        <!--  -->
+        <div class="row">
+            <div class="control_panel">
+                <div class="col-md-2 p1" style="padding: 50px">
+                    <label for="slider_id">Body rotation X</label>
+                    <input class="slider" type="range" min="-180" max="180" value="0" id="torso-r-x" step="10" name="slider_id">
+                    <label for="slider_id">Body rotation Y</label>
+                    <input class="slider" type="range" min="-180" max="180" value="0" id="torso-r-y" step="10" name="slider_id">
+                    <label for="slider_id">Body rotation Z</label>
+                    <input class="slider" type="range" min="-180" max="180" value="0" id="torso-r-z" step="10" name="slider_id">
+                </div>
+
+                <div class="col-md-2 p2" style="padding: 50px">
+                    <label for="slider_id">Position X</label>
+                    <input class="slider" type="range" min="-300" max="300" value="3" id="pos-x" step="10" name="slider_id">
+                    <label for="slider_id">Position Y</label>
+                    <input class="slider" type="range" min="0" max="100" value="3" id="pos-y" step="10" name="slider_id">
+                </div>
+
+                <!-- Head and Neck -->
+                <div class="col-md-2 p3" style="padding: 50px">
+                    <label for="slider_id">Head rotation X</label>
+                    <input class="slider" type="range" min="0" max="40" value="0" id="head-x" step="10" name="slider_id">
+                    <label for="slider_id">Head rotation Y</label>
+                    <input class="slider" type="range" min="-60" max="60" value="0" id="head-y" step="10" name="slider_id">
+                    <label for="slider_id">Neck rotation</label>
+                    <input class="slider" type="range" min="10" max="100" value="0" id="neck" step="10" name="slider_id">
+                    <label for="slider_id">Right Anthenna rotation</label>
+                    <input class="slider" type="range" min="-30" max="30" value="0" id="ant-r" step="10" name="slider_id">
+                    <label for="slider_id">Left Anthenna rotation</label>
+                    <input class="slider" type="range" min="-30" max="30" value="0" id="ant-l" step="10" name="slider_id">
+                </div>
+
+                <!-- Front limbs -->
+                <div class="col-md-2 p4" style="padding: 50px">
+                    <label for="slider_id">Front-upper-right X</label>
+                    <input class="slider" type="range" min="-40" max="110" value="0" id="front-r-u-x" step="10" name="slider_id">
+                    <label for="slider_id">Front-upper-right Z</label>
+                    <input class="slider" type="range" min="-90" max="-10" value="0" id="front-r-u-z" step="10" name="slider_id">
+                    <label for="slider_id">Front-middle-right</label>
+                    <input class="slider" type="range" min="10" max="160" value="0" id="front-m-r" step="10" name="slider_id">
+                    <label for="slider_id">Front-lower-right</label>
+                    <input class="slider" type="range" min="-150" max="-20" value="0" id="front-r-l" step="10" name="slider_id">
+                    <label for="slider_id">Front-upper-left X</label>
+                    <input class="slider" type="range" min="-40" max="110" value="0" id="front-l-u-x" step="10" name="slider_id">
+                    <label for="slider_id">Front-upper-left Z</label>
+                    <input class="slider" type="range" min="10" max="90" value="0" id="front-l-u-z" step="10" name="slider_id">
+                    <label for="slider_id">Front-middle-left</label>
+                    <input class="slider" type="range" min="10" max="160" value="0" id="front-m-l" step="10" name="slider_id">
+                    <label for="slider_id">Front-lower-left</label>
+                    <input class="slider" type="range" min="-150" max="-20" value="0" id="front-l-l" step="10" name="slider_id">
+                </div>
+
+                <!-- Middle limbs -->
+                <div class="col-md-2 p5" style="padding: 50px">
+                    <label for="slider_id">Middle-upper-right</label>
+                    <input class="slider" type="range" min="-60" max="-20" value="0" id="mid-r-u" step="10" name="slider_id">
+                    <label for="slider_id">Middle-lower-right</label>
+                    <input class="slider" type="range" min="10" max="110" value="0" id="mid-r-l" step="10" name="slider_id">
+                    <label for="slider_id">Middle-upper-left</label>
+                    <input class="slider" type="range" min="20" max="60" value="0" id="mid-l-u" step="10" name="slider_id">
+                    <label for="slider_id">Middle-lower-left</label>
+                    <input class="slider" type="range" min="10" max="110" value="0" id="mid-l-l" step="10" name="slider_id">
+                </div>
+
+                <!-- Back limbs -->
+                <div class="col-md-2 p6" style="padding: 50px">
+                    <label for="slider_id">Back-upper-right</label>
+                    <input class="slider" type="range" min="-60" max="-10" value="0" id="back-r-u" step="10" name="slider_id">
+                    <label for="slider_id">Back-lower-right</label>
+                    <input class="slider" type="range" min="80" max="140" value="0" id="back-r-l" step="10" name="slider_id">
+                    <label for="slider_id">Back-upper-left</label>
+                    <input class="slider" type="range" min="10" max="60" value="0" id="back-l-u" step="10" name="slider_id">
+                    <label for="slider_id">Back-lower-left</label>
+                    <input class="slider" type="range" min="80" max="140" value="0" id="back-l-l" step="10" name="slider_id">
+                </div>
+            </div>
+        </div>
+
+        <!-- Canvas element -->
+        <div id="bgCanvas">
+            <div class="row text-center">
+                <div class="col-md-12">
+                    <canvas id="gl-canvas" width="1280" height="700">
+                        Your browser does not support the HTML5 canvas element.
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ________Scripts_______ -->
+
+    <!-- Vertex Shader -->
+    <script type="x-shader/x-vertex" id="vertex-shader">
+
+    attribute vec4 vPosition;
+    attribute vec3 vColor;
+    attribute vec3 vNormal;
+    attribute  vec2 vTexCoord;
+
+    varying vec4 fColor;
+    varying vec2 fTexCoord;
+
+    uniform mat4 modelViewMatrix;
+    uniform mat4 projectionMatrix;
+
+    // Lighting and Shading
+    uniform vec4 ambientProd, diffuseProd, specularProd;
+    uniform vec4 lightPos;
+    uniform float shininess;
+
+    void main()
+    {
+        vec3 light = lightPos.xyz;
+        vec3 pos = -(modelViewMatrix * vPosition).xyz;
+
+        vec3 L = normalize(light - pos);
+        vec3 E = normalize(-pos);
+        vec3 H = normalize(L + E);
+        vec4 NN = vec4(vNormal, 0);
+        vec3 N = normalize((modelViewMatrix * NN).xyz);
+
+        // Applying the Formula (Phong model)
+        vec4 ambient = ambientProd;
+
+        float kd = max(dot(L, N), 0.0);
+        vec4 diffuse = kd * diffuseProd;
+
+        float ks = pow(max(dot(N, H), 0.0), shininess);
+        vec4 specular = ks * specularProd;
+
+        if(dot(L, N) < 0.0)
+            specular = vec4(0.0, 0.0, 0.0, 1.0);
+
+        gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+        fColor = ambient + diffuse + specular;// + vec4(vColor, 1.0);
+        fTexCoord = vTexCoord;
+    }
+
+    </script>
+
+    <!-- Fragment Shader -->
+    <script type="x-shader/x-fragment" id="fragment-shader">
+
+    precision mediump float;
+
+    varying vec4 fColor;
+    varying  vec2 fTexCoord;
+
+    uniform sampler2D texture;
+
+    void main()
+    {
+        gl_FragColor = fColor * texture2D(texture, fTexCoord);
+    }
+
+    </script>
+
+    <!-- Included sciprts for src and Executable -->
+    <script type="text/javascript" src="Executable/webgl-utils.js"></script>
+    <script type="text/javascript" src="Executable/initShaders.js"></script>
+    <script type="text/javascript" src="Executable/MV.js"></script>
+    <script type="text/javascript" src="Source/scripts/data.js"></script>
+    <script type="text/javascript" src="Source/scripts/insect_gen.js"></script>
+
+    <img id = "texImage" src = "Source/texture/green_texture.jpg" hidden></img>
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="Source/style/bootstrap/js/fullView.js"></script>
+    <script src="Source/style/bootstrap/js/toastr.js"></script>
+
+
+</body>
+</html>
